@@ -1,0 +1,147 @@
+
+simple flask application with docker
+
+fist you should create temporary container from alpine and install manually the flask app for making sure running the application without any issues
+ 
+step-1 
+Pull an alpine image from Docker hub
+
+#docker image pull alpine:3.8
+
+step-2 
+Create a container from downloaded image alpine:3.8
+
+#docker container run --name test -it -d -p 80:5000 alpine:3.8
+
+step-3
+Login to the created container
+
+#docker attach test
+
+step-4
+Install python3 and pip3 on container
+
+#apk update
+#apk add --no-cache python3
+#apk add --no-cache pip3
+
+step-5
+create a working directory
+
+#mkdir /var/flaskapp
+
+step-6
+create following files under working directory
+
+#touch app.py requirements.txt
+
+step-7
+write a simple flask app in app.py
+#vi app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+if __name__ == "__main__":
+   app.run(host='0.0.0.0' , port=5000)
+   
+
+step-8
+write required packages in requirements.txt file
+
+vi requirements.txt
+flask
+
+step-9
+install flask using pip from requirements.txt
+
+#pip3 install -r requirements.txt
+
+step-10
+run app.py
+
+#python3 app.py
+
+browse the public IP in browser, you can see your application
+
+
+step-11
+delete created container and images
+
+docker container stop test
+docker container rm test
+docker image rm alpine:3.8
+
+
+create a docker image for flask app
+-----------------------------------
+
+
+step-1
+create a folder
+mkdir flaskapp
+cd flaskapp
+
+step-2
+create Dockerfile and app.py and requirements.txt under flaskapp directory
+touch Dockerfile app.py requirements.txt
+
+step-3
+write a simple flask application in app.py file
+vi app.py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Devops Flaskapp!'
+
+if __name__ == "__main__":
+   app.run(host='0.0.0.0',port=5000)
+
+
+step-4
+insert required packages in requirements.txt file
+vi requirements.txt
+flask
+
+
+step-5
+create Docker file
+vi Dockerfile
+FROM alpine:3.8
+RUN mkdir /var/flaskapp
+WORKDIR /var/flaskapp
+COPY . .
+RUN apk update && apk add --no-cache python3 
+RUN pip3 install -r requirements.txt
+EXPOSE 5000
+CMD ["python3" , "app.py"]
+
+
+step-6 
+build Docker image 
+docker image build -t bibin521/deopsflask:1 -t bibin521/devopsflask:latest .
+
+step-7
+login to docker hub
+docker login
+
+step-8
+push the created images in docker hub
+docker push bibin521/deopsflask:1 
+docker push bibin521/devopsflask:latest
+
+
+--------------------------------------------
+
+
+
+
+
+
+
+
