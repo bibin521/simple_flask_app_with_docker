@@ -136,6 +136,10 @@ docker push bibin521/deopsflask:1
 docker push bibin521/devopsflask:latest
 
 
+step-9 
+create the container from the dockerized container
+docker container run --name flask -d -it -p 80:5000 bibin521/devopsflask:latest
+http://ip_address
 --------------------------------------------
 
 
